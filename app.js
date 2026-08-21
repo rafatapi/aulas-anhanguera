@@ -29,7 +29,7 @@ document.querySelectorAll('.tab').forEach(button=>button.addEventListener('click
 
 function renderHome(){
  const now=new Date();now.setHours(0,0,0,0);const next=lessons.find(l=>dateObj(l.date)>=now&&l.type!=='Feriado')||lessons[lessons.length-1];const c=byId(next.course);
- document.getElementById('next-class').innerHTML=`<small>PRÓXIMA AULA · ${fmtDate(next.date)}</small><h2>${c.name}</h2><p>${next.topic}</p><div class="next-meta"><span>▣ Sala ${c.room}</span><span>◷ ${c.time}</span></div>`;
+ document.getElementById('next-class').innerHTML=`<small>PRÓXIMA AULA · ${fmtDate(next.date)}</small><div class="next-layout"><div class="next-content"><h2>${c.name}</h2><p>${next.topic}</p><div class="next-meta"><span>◷ ${c.time}</span></div></div><div class="next-room"><small>SALA</small><strong>${c.room}</strong></div></div>`;
  document.getElementById('course-cards').innerHTML=courses.map(c=>`<article class="course-card" style="--course:${c.color}"><div class="course-top"><span class="course-icon">${c.icon}</span><div><h3>${c.name}</h3><p>${c.day} · ${c.time}</p></div><span>Sala ${c.room}</span></div><div class="course-details"><div>Aprovação<strong>${c.approval}</strong></div><div>Prova<strong>${c.exam}</strong></div><div>Turma<strong>${c.students} alunos</strong></div><div>Período<strong>2026.2</strong></div></div></article>`).join('');
 }
 
