@@ -5,9 +5,9 @@ const courses=[
 ];
 
 const students={
- mat:['Gabriel 1','Caique','Gabriel 2','Joao','Kelly','Khaled','Murillo','Pedro','Rafael','Thiago'],
- py:['Gabriel 1','Caique','Gabriel 2','Joao','Kelly','Khaled','Marilton','Murillo','Rafael','Thiago'],
- js:['Beatriz','Cassio','Dawens','Felipe 1','Franciny','Guilherme 1','Isabelly','Jeferson','Jessica','Juvelino','Murillo','Nicolas','Pedro','Samuel','Tony','Gabriel','Felipe 2','Guilherme 2','Lucas']
+ mat:['Gabriel R.','Caique B.','Gabriel V.','Joao O.','Kelly S.','Khaled F.','Murillo S.','Pedro P.','Rafael M.','Thiago S.'],
+ py:['Gabriel R.','Caique B.','Gabriel V.','Joao O.','Kelly S.','Khaled F.','Marilton C.','Murillo S.','Rafael M.','Thiago S.'],
+ js:['Beatriz S.','Cassio S.','Dawens F.','Felipe N.','Franciny A.','Guilherme O.','Isabelly C.','Jeferson L.','Jessica Y.','Juvelino B.','Murillo C.','Nicolas C.','Pedro P.','Samuel S.','Tony S.','Gabriel P.','Felipe G.','Guilherme C.','Lucas F.']
 };
 
 const rawLessons={
@@ -38,6 +38,7 @@ function renderFilters(){document.getElementById('calendar-filters').innerHTML=[
 function renderCalendar(){
  renderFilters();const list=lessons.filter(l=>calendarFilter==='all'||l.course===calendarFilter);
  document.getElementById('calendar-list').innerHTML=list.map(l=>{const c=byId(l.course),d=dateObj(l.date),state=lessonState[l.id]||{};return `<article class="lesson ${state.done?'done':''}" style="--course:${c.color}"><div class="lesson-date"><strong>${String(d.getDate()).padStart(2,'0')}</strong><span>${d.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</span></div><div class="lesson-body"><small>${c.name} · ${l.type}</small><h3>${l.topic}</h3><p>Sala ${c.room} · ${c.time}</p></div><label class="lesson-check"><input type="checkbox" data-lesson-check="${l.id}" ${state.done?'checked':''} aria-label="Marcar aula concluída"></label><div class="lesson-note"><textarea data-lesson-note="${l.id}" placeholder="Anotação desta aula…">${state.note||''}</textarea></div></article>`}).join('');updateProgress();
+ document.querySelectorAll('#calendar-list .lesson').forEach(card=>{const text=card.querySelector('small').textContent;if(/férias|feriado/i.test(text))card.classList.add('lesson-holiday');else if(/avaliação|chamada|exame/i.test(text))card.classList.add('lesson-exam');else if(/revisão/i.test(text))card.classList.add('lesson-review')});
 }
 function saveLessonState(){localStorage.setItem('faculdade-lessons-v1',JSON.stringify(lessonState))}
 function updateProgress(){const done=lessons.filter(l=>lessonState[l.id]?.done).length,pct=Math.round(done/lessons.length*100);document.getElementById('lesson-progress').textContent=`${done} de ${lessons.length} aulas concluídas`;document.getElementById('progress-pct').textContent=`${pct}%`;document.getElementById('progress-fill').style.width=`${pct}%`}
@@ -48,10 +49,32 @@ document.getElementById('calendar-list').addEventListener('input',e=>{if(e.targe
 function renderStudents(query=''){const q=query.trim().toLocaleLowerCase('pt-BR');document.getElementById('student-groups').innerHTML=courses.map(c=>{const names=students[c.id].filter(n=>n.toLocaleLowerCase('pt-BR').includes(q));return `<details class="student-group" open><summary>${c.name}<span>${names.length} alunos</span></summary><div class="student-list">${names.map(n=>`<div class="student">${n}</div>`).join('')||'<div class="student">Nenhum resultado</div>'}</div></details>`}).join('')}
 document.getElementById('student-search').addEventListener('input',e=>renderStudents(e.target.value));
 
+// ── CHAMADA OFFLINE ──
+const ATTENDANCE_KEY='faculdade-attendance-v1';
+let attendance=stored(ATTENDANCE_KEY);
+const attendanceCourse=document.getElementById('attendance-course');
+const attendanceDate=document.getElementById('attendance-date');
+attendanceCourse.innerHTML=courses.map(c=>`<option value="${c.id}">${c.name} · Sala ${c.room}</option>`).join('');
+attendanceDate.value=new Date().toLocaleDateString('sv-SE');
+const weekdayCourse={2:'mat',3:'py',4:'js'}[new Date().getDay()];if(weekdayCourse)attendanceCourse.value=weekdayCourse;
+const attendanceKey=()=>`${attendanceDate.value}|${attendanceCourse.value}`;
+const attendanceRecord=()=>attendance[attendanceKey()]||(attendance[attendanceKey()]={});
+function saveAttendance(){localStorage.setItem(ATTENDANCE_KEY,JSON.stringify(attendance))}
+function renderAttendance(){const record=attendanceRecord(),names=students[attendanceCourse.value],present=names.filter(n=>record[n]==='P').length,absent=names.filter(n=>record[n]==='F').length;document.getElementById('attendance-summary').innerHTML=`<strong>${present} presentes</strong><span>${absent} faltas · ${names.length-present-absent} sem marcar</span>`;document.getElementById('attendance-list').innerHTML=names.map((name,index)=>`<div class="attendance-student"><b>${index+1}</b><strong>${name}</strong><div><button class="attendance-status present ${record[name]==='P'?'active':''}" data-attendance-name="${name}" data-status="P">Presente</button><button class="attendance-status absent ${record[name]==='F'?'active':''}" data-attendance-name="${name}" data-status="F">Falta</button></div></div>`).join('')}
+attendanceCourse.addEventListener('change',renderAttendance);attendanceDate.addEventListener('change',renderAttendance);
+document.getElementById('attendance-list').addEventListener('click',e=>{const button=e.target.closest('[data-attendance-name]');if(!button)return;const record=attendanceRecord(),name=button.dataset.attendanceName;record[name]=record[name]===button.dataset.status?'':button.dataset.status;saveAttendance();renderAttendance()});
+document.getElementById('attendance-all').addEventListener('click',()=>{const record=attendanceRecord();students[attendanceCourse.value].forEach(name=>record[name]='P');saveAttendance();renderAttendance()});
+document.getElementById('attendance-clear').addEventListener('click',()=>{attendance[attendanceKey()]={};saveAttendance();renderAttendance()});
+function generateAttendanceText(){const c=byId(attendanceCourse.value),record=attendanceRecord(),names=students[c.id],present=names.filter(n=>record[n]==='P'),absent=names.filter(n=>record[n]==='F'),pending=names.filter(n=>!record[n]);const date=attendanceDate.value?new Date(`${attendanceDate.value}T12:00:00`).toLocaleDateString('pt-BR'):'';const text=[`CHAMADA — ${c.name}`,`Data: ${date} · Sala ${c.room}`,`Presentes (${present.length}): ${present.join(', ')||'nenhum'}`,`Faltas (${absent.length}): ${absent.join(', ')||'nenhuma'}`,pending.length?`Sem marcação (${pending.length}): ${pending.join(', ')}`:''].filter(Boolean).join('\n');document.getElementById('attendance-text').value=text;return text}
+document.getElementById('attendance-generate').addEventListener('click',generateAttendanceText);
+document.getElementById('attendance-copy').addEventListener('click',async()=>{const text=generateAttendanceText();try{await navigator.clipboard.writeText(text);toast('Chamada copiada')}catch{document.getElementById('attendance-text').select();document.execCommand('copy');toast('Chamada copiada')}});
+document.getElementById('attendance-download').addEventListener('click',()=>{const text=generateAttendanceText(),link=document.createElement('a');link.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));link.download=`chamada-${attendanceCourse.value}-${attendanceDate.value}.txt`;link.click();URL.revokeObjectURL(link.href)});
+renderAttendance();
+
 const PRIVATE_KEY='faculdade-private-v1';const privateData=stored(PRIVATE_KEY);document.getElementById('private-email').value=privateData.email||'';document.getElementById('private-wifi').value=privateData.wifi||'';
 document.getElementById('private-form').addEventListener('submit',e=>{e.preventDefault();localStorage.setItem(PRIVATE_KEY,JSON.stringify({email:document.getElementById('private-email').value,wifi:document.getElementById('private-wifi').value}));document.getElementById('save-status').textContent='Salvo somente neste aparelho';toast('Informações salvas')});
 document.getElementById('show-wifi').addEventListener('change',e=>document.getElementById('private-wifi').type=e.target.checked?'text':'password');
-document.getElementById('reset-data').addEventListener('click',()=>{if(confirm('Limpar todas as anotações, marcações e informações privadas deste aparelho?')){localStorage.removeItem('faculdade-lessons-v1');localStorage.removeItem(PRIVATE_KEY);location.reload()}});
+document.getElementById('reset-data').addEventListener('click',()=>{if(confirm('Limpar todas as anotações, chamadas, marcações e informações privadas deste aparelho?')){localStorage.removeItem('faculdade-lessons-v1');localStorage.removeItem(ATTENDANCE_KEY);localStorage.removeItem(PRIVATE_KEY);location.reload()}});
 function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
 renderHome();renderCalendar();renderStudents();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js');

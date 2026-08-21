@@ -22,6 +22,7 @@
   <nav class="tabs" aria-label="Seções">
     <button class="tab active" data-section="inicio">⌂<span>Início</span></button>
     <button class="tab" data-section="calendario">▦<span>Calendário</span></button>
+    <button class="tab" data-section="chamada">✓<span>Chamada</span></button>
     <button class="tab" data-section="alunos">♟<span>Alunos</span></button>
     <button class="tab" data-section="links">↗<span>Links</span></button>
     <button class="tab" data-section="ajustes">⚙<span>Ajustes</span></button>
@@ -49,6 +50,15 @@
       <div class="filter-row" id="calendar-filters"></div>
       <div class="progress-card"><div><strong id="lesson-progress">0 de 0 aulas concluídas</strong><span id="progress-pct">0%</span></div><div class="progress-track"><i id="progress-fill"></i></div></div>
       <div id="calendar-list" class="calendar-list"></div>
+    </section>
+
+    <section id="chamada" class="section">
+      <div class="section-title"><div><small>REGISTRO OFFLINE</small><h2>Fazer chamada</h2></div><span>Presente ou falta</span></div>
+      <div class="attendance-controls"><label>Turma<select id="attendance-course"></select></label><label>Data<input id="attendance-date" type="date"></label></div>
+      <div class="attendance-toolbar"><button id="attendance-all">Todos presentes</button><button id="attendance-clear">Limpar</button></div>
+      <div id="attendance-summary" class="attendance-summary"></div>
+      <div id="attendance-list" class="attendance-list"></div>
+      <div class="attendance-export"><button id="attendance-generate">Gerar texto da chamada</button><textarea id="attendance-text" readonly placeholder="O resumo aparecerá aqui…"></textarea><div><button id="attendance-copy">Copiar texto</button><button id="attendance-download">Baixar .txt</button></div></div>
     </section>
 
     <section id="alunos" class="section">

@@ -1,4 +1,4 @@
-const CACHE='aulas-v3';
+const CACHE='aulas-v5';
 const ASSETS=['./','./index.html','./style.css','./home-adjustments.css','./app.js','./manifest.json','./assets/icon.svg'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));self.skipWaiting()});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))));self.clients.claim()});
