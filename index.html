@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ef6c00">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Minhas Aulas">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icon.svg">
+  <link rel="apple-touch-icon" href="assets/icon.svg">
+  <link rel="stylesheet" href="style.css">
+  <title>Minhas Aulas · Anhanguera</title>
+</head>
+<body>
+  <header class="hero">
+    <div class="brand"><span class="brand-mark">A</span><div><small>ANHANGUERA</small><h1>Minhas Aulas</h1></div></div>
+    <p>Agenda docente · 2º semestre de 2026</p>
+    <div class="hero-stats"><span><strong>3</strong> disciplinas</span><span><strong>39</strong> matrículas</span><span><strong>3</strong> noites</span></div>
+  </header>
+
+  <nav class="tabs" aria-label="Seções">
+    <button class="tab active" data-section="inicio">⌂<span>Início</span></button>
+    <button class="tab" data-section="calendario">▦<span>Calendário</span></button>
+    <button class="tab" data-section="alunos">♟<span>Alunos</span></button>
+    <button class="tab" data-section="links">↗<span>Links</span></button>
+    <button class="tab" data-section="ajustes">⚙<span>Ajustes</span></button>
+  </nav>
+
+  <main>
+    <section id="inicio" class="section active">
+      <div id="next-class" class="next-card"></div>
+      <div class="section-title"><div><small>SEMANA LETIVA</small><h2>Suas disciplinas</h2></div><span>Terça a quinta</span></div>
+      <div id="course-cards" class="course-grid"></div>
+      <details class="schedule-card">
+        <summary><span>◷ Horários das aulas</span><small>Toque para consultar</small></summary>
+        <div class="period-list">
+          <div><strong>1ª aula</strong><span>19h00–19h50</span></div>
+          <div><strong>2ª aula</strong><span>19h50–20h40</span></div>
+          <div class="break"><strong>Intervalo</strong><span>20h40–21h00</span></div>
+          <div><strong>3ª aula</strong><span>21h00–21h50</span></div>
+          <div><strong>4ª aula</strong><span>21h50–22h40</span></div>
+        </div>
+      </details>
+    </section>
+
+    <section id="calendario" class="section">
+      <div class="section-title"><div><small>AGOSTO A DEZEMBRO</small><h2>Calendário de aulas</h2></div></div>
+      <div class="filter-row" id="calendar-filters"></div>
+      <div class="progress-card"><div><strong id="lesson-progress">0 de 0 aulas concluídas</strong><span id="progress-pct">0%</span></div><div class="progress-track"><i id="progress-fill"></i></div></div>
+      <div id="calendar-list" class="calendar-list"></div>
+    </section>
+
+    <section id="alunos" class="section">
+      <div class="section-title"><div><small>DADOS REDUZIDOS</small><h2>Alunos por turma</h2></div><span>Somente primeiro nome</span></div>
+      <label class="search"><span>⌕</span><input id="student-search" type="search" placeholder="Buscar primeiro nome" autocomplete="off"></label>
+      <div id="student-groups"></div>
+    </section>
+
+    <section id="links" class="section">
+      <div class="section-title"><div><small>ACESSO RÁPIDO</small><h2>Portais acadêmicos</h2></div></div>
+      <div class="link-grid">
+        <a href="https://docenteonline.kroton.com.br/login.php" target="_blank" rel="noopener"><span class="link-icon">P</span><div><strong>Portal do Professor</strong><small>Diário, notas e frequência</small></div><b>›</b></a>
+        <a href="https://www.avaeduc.com.br/" target="_blank" rel="noopener"><span class="link-icon">A</span><div><strong>AVA</strong><small>Ambiente Virtual de Aprendizagem</small></div><b>›</b></a>
+        <a href="https://humbertogoncalves-pro.github.io/Mapa-Sala-Presencial/" target="_blank" rel="noopener"><span class="link-icon">M</span><div><strong>Mapa das Salas</strong><small>Localização das salas presenciais</small></div><b>›</b></a>
+      </div>
+      <div class="offline-note"><strong>Disponível offline</strong><p>A agenda, os alunos e suas anotações funcionam sem internet. Os portais externos precisam de conexão.</p></div>
+    </section>
+
+    <section id="ajustes" class="section">
+      <div class="section-title"><div><small>SOMENTE NESTE APARELHO</small><h2>Informações privadas</h2></div></div>
+      <div class="privacy-card"><strong>🔒 Não serão publicadas</strong><p>Os valores abaixo ficam no armazenamento local deste navegador e não fazem parte dos arquivos do site.</p></div>
+      <form id="private-form" class="form-card">
+        <label>E-mail institucional<input id="private-email" type="email" autocomplete="off" placeholder="Digite no aparelho"></label>
+        <label>Senha do Wi‑Fi<input id="private-wifi" type="password" autocomplete="off" placeholder="Digite no aparelho"></label>
+        <label class="show-password"><input id="show-wifi" type="checkbox"> Mostrar senha</label>
+        <button type="submit">Salvar neste aparelho</button><span id="save-status"></span>
+      </form>
+      <div class="install-card"><span>⌂</span><div><strong>Instalar no iPhone</strong><p>No Safari, toque em Compartilhar e depois em “Adicionar à Tela de Início”. Abra uma vez com internet para baixar o conteúdo offline.</p></div></div>
+      <button id="reset-data" class="danger-btn">Limpar anotações e dados locais</button>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
