@@ -77,4 +77,4 @@ document.getElementById('show-wifi').addEventListener('change',e=>document.getEl
 document.getElementById('reset-data').addEventListener('click',()=>{if(confirm('Limpar todas as anotações, chamadas, marcações e informações privadas deste aparelho?')){localStorage.removeItem('faculdade-lessons-v1');localStorage.removeItem(ATTENDANCE_KEY);localStorage.removeItem(PRIVATE_KEY);location.reload()}});
 function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
 renderHome();renderCalendar();renderStudents();
-if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js');
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js').then(registration=>registration.update());
