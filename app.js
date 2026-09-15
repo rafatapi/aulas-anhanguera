@@ -1,5 +1,5 @@
 const courses=[
- {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'B-30',time:'19h00–20h40 · 21h00–21h50',students:15,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'∑'},
+ {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:15,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'∑'},
  {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:14,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#5f6368',icon:'Py'},
  {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:19,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#d95800',icon:'JS'}
 ];
