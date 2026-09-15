@@ -6,18 +6,18 @@ const courses=[
 
 const studentGroups={
  mat:[
-  {id:'mat-1',label:'Lista 1',names:['Gabriel R.']},
-  {id:'mat-2',label:'Lista 2',names:['Arlindo F.','Caique B.','Gabriel V.','Joao O.','Kelly S.','Khaled F.','Murillo S.','Pedro P.','Rafael M.']},
-  {id:'mat-3',label:'Lista 3',names:['Arthur G.','Gabriel R.','Gustavo F.','Rafaela O.','Romair G.']}
+  {id:'mat-1',label:'Lista 1',names:['Gabriel R. P.']},
+  {id:'mat-2',label:'Lista 2',names:['Arlindo F.','Caique B.','Gabriel V.','Joao P. O.','Kelly S.','Khaled F.','Murillo S.','Pedro H. P.','Rafael M.']},
+  {id:'mat-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Rafaela O.','Romair G.']}
  ],
  py:[
-  {id:'py-1',label:'Lista 1',names:['Caique B.','Gabriel V.','Joao O.','Kelly S.','Khaled F.','Marilton C.','Murillo S.','Rafael M.']},
-  {id:'py-2',label:'Lista 2',names:['Gabriel R.']},
-  {id:'py-3',label:'Lista 3',names:['Arthur G.','Gabriel R.','Gustavo F.','Rafaela O.','Romair G.']}
+  {id:'py-1',label:'Lista 1',names:['Caique B.','Gabriel V.','Joao P. O.','Kelly S.','Khaled F.','Marilton C.','Murillo S.','Rafael M.']},
+  {id:'py-2',label:'Lista 2',names:['Gabriel R. P.']},
+  {id:'py-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Rafaela O.','Romair G.']}
  ],
  js:[
-  {id:'js-1',label:'Lista 1',names:['Beatriz S.','Cassio S.','Dawens F.','Felipe N.','Franciny A.','Guilherme O.','Isabelly C.','Ittalo L.','Jeferson L.','Jessica Y.','Joao O.','Juvelino B.','Murillo C.','Pedro P.','Samuel S.','Tony S.']},
-  {id:'js-2',label:'Lista 2',names:['Gabriel R.']},
+  {id:'js-1',label:'Lista 1',names:['Beatriz S.','Cassio S.','Dawens F.','Felipe N.','Franciny A.','Guilherme O.','Isabelly C.','Ittalo L.','Jeferson L.','Jessica Y.','Joao V. O.','Juvelino B.','Murillo C.','Pedro G. P.','Samuel S.','Tony S.']},
+  {id:'js-2',label:'Lista 2',names:['Gabriel R. P.']},
   {id:'js-3',label:'Lista 3',names:['Felipe G.','Lucas F.']}
  ]
 };
@@ -71,7 +71,17 @@ attendanceDate.value=new Date().toLocaleDateString('sv-SE');
 const weekdayCourse={2:'mat',3:'py',4:'js'}[new Date().getDay()];if(weekdayCourse)attendanceCourse.value=weekdayCourse;
 const currentGroups=()=>studentGroups[attendanceCourse.value];
 const attendanceKey=group=>`${attendanceDate.value}|${group.id}`;
-function attendanceRecord(group){const key=attendanceKey(group);if(!attendance[key]){const legacy=attendance[`${attendanceDate.value}|${attendanceCourse.value}`]||{};attendance[key]={};if(!['mat-3','py-3'].includes(group.id))group.names.forEach(name=>{if(legacy[name])attendance[key][name]=legacy[name]});if(group.id==='js-2'&&legacy['Gabriel P.'])attendance[key]['Gabriel R.']=legacy['Gabriel P.']}return attendance[key]}
+const attendanceAliases={
+ 'mat-1':{'Gabriel R. P.':'Gabriel R.'},
+ 'mat-2':{'Joao P. O.':'Joao O.','Pedro H. P.':'Pedro P.'},
+ 'mat-3':{'Gabriel R. S.':'Gabriel R.'},
+ 'py-1':{'Joao P. O.':'Joao O.'},
+ 'py-2':{'Gabriel R. P.':'Gabriel R.'},
+ 'py-3':{'Gabriel R. S.':'Gabriel R.'},
+ 'js-1':{'Joao V. O.':'Joao O.','Pedro G. P.':'Pedro P.'},
+ 'js-2':{'Gabriel R. P.':'Gabriel R.'}
+};
+function attendanceRecord(group){const key=attendanceKey(group),aliases=attendanceAliases[group.id]||{};let changed=false;if(!attendance[key]){const legacy=attendance[`${attendanceDate.value}|${attendanceCourse.value}`]||{};attendance[key]={};changed=true;if(!['mat-3','py-3'].includes(group.id))group.names.forEach(name=>{const oldName=aliases[name]||name;if(legacy[oldName])attendance[key][name]=legacy[oldName]});if(group.id==='js-2'&&legacy['Gabriel P.'])attendance[key]['Gabriel R. P.']=legacy['Gabriel P.']}const record=attendance[key];Object.entries(aliases).forEach(([name,oldName])=>{if(record[oldName]!==undefined){if(record[name]===undefined)record[name]=record[oldName];delete record[oldName];changed=true}});if(changed)saveAttendance();return record}
 function saveAttendance(){localStorage.setItem(ATTENDANCE_KEY,JSON.stringify(attendance))}
 function renderAttendance(){let present=0,absent=0,total=0;document.getElementById('attendance-list').innerHTML=currentGroups().map(group=>{const record=attendanceRecord(group);present+=group.names.filter(name=>record[name]==='P').length;absent+=group.names.filter(name=>record[name]==='F').length;total+=group.names.length;return `<div class="attendance-group-title"><strong>${group.label}</strong><span>${group.names.length} alunos</span></div>${group.names.map((name,index)=>`<div class="attendance-student"><b>${index+1}</b><strong>${name}</strong><div><button class="attendance-status present ${record[name]==='P'?'active':''}" data-attendance-group="${group.id}" data-attendance-name="${name}" data-status="P">Presente</button><button class="attendance-status absent ${record[name]==='F'?'active':''}" data-attendance-group="${group.id}" data-attendance-name="${name}" data-status="F">Falta</button></div></div>`).join('')}`}).join('');document.getElementById('attendance-summary').innerHTML=`<strong>${present} presentes</strong><span>${absent} faltas · ${total-present-absent} sem marcar</span>`}
 attendanceCourse.addEventListener('change',renderAttendance);attendanceDate.addEventListener('change',renderAttendance);
