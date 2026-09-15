@@ -58,9 +58,6 @@ document.getElementById('calendar-filters').addEventListener('click',e=>{const b
 document.getElementById('calendar-list').addEventListener('change',e=>{if(e.target.dataset.lessonCheck){const id=e.target.dataset.lessonCheck;lessonState[id]={...(lessonState[id]||{}),done:e.target.checked};saveLessonState();renderCalendar()}});
 document.getElementById('calendar-list').addEventListener('input',e=>{if(e.target.dataset.lessonNote){const id=e.target.dataset.lessonNote;lessonState[id]={...(lessonState[id]||{}),note:e.target.value};saveLessonState()}});
 
-function renderStudents(query=''){const q=query.trim().toLocaleLowerCase('pt-BR');document.getElementById('student-groups').innerHTML=courses.flatMap(c=>studentGroups[c.id].map(group=>{const names=group.names.filter(n=>n.toLocaleLowerCase('pt-BR').includes(q));return `<details class="student-group" open><summary>${c.name} · ${group.label}<span>${names.length} alunos</span></summary><div class="student-list">${names.map(n=>`<div class="student">${n}</div>`).join('')||'<div class="student">Nenhum resultado</div>'}</div></details>`})).join('')}
-document.getElementById('student-search').addEventListener('input',e=>renderStudents(e.target.value));
-
 // ── CHAMADA OFFLINE ──
 const ATTENDANCE_KEY='faculdade-attendance-v1';
 let attendance=stored(ATTENDANCE_KEY);
@@ -99,5 +96,5 @@ document.getElementById('private-form').addEventListener('submit',e=>{e.preventD
 document.getElementById('show-wifi').addEventListener('change',e=>document.getElementById('private-wifi').type=e.target.checked?'text':'password');
 document.getElementById('reset-data').addEventListener('click',()=>{if(confirm('Limpar todas as anotações, chamadas, marcações e informações privadas deste aparelho?')){localStorage.removeItem('faculdade-lessons-v1');localStorage.removeItem(ATTENDANCE_KEY);localStorage.removeItem(PRIVATE_KEY);location.reload()}});
 function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
-renderHome();renderCalendar();renderStudents();
+renderHome();renderCalendar();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js').then(registration=>registration.update());

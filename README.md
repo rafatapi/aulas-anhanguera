@@ -7,7 +7,7 @@ PWA mobile-first para organização das aulas do segundo semestre de 2026.
 - agenda semanal e próxima aula;
 - calendário por disciplina;
 - controle de aulas concluídas e anotações offline;
-- listas contendo somente o primeiro nome dos alunos;
+- listas de chamada com nomes abreviados por iniciais;
 - critérios de aprovação, salas e horários;
 - links acadêmicos;
 - informações privadas armazenadas apenas no navegador;
