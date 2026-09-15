@@ -1,7 +1,7 @@
 const courses=[
- {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:15,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'∑'},
- {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:14,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#5f6368',icon:'Py'},
- {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:19,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#d95800',icon:'JS'}
+ {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:15,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'assets/math.svg'},
+ {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:14,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#3776ab',icon:'assets/python.svg'},
+ {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:19,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#b38800',icon:'assets/javascript.svg'}
 ];
 
 const studentGroups={
@@ -42,7 +42,7 @@ document.querySelectorAll('.tab').forEach(button=>button.addEventListener('click
 function renderHome(){
  const now=new Date();now.setHours(0,0,0,0);const next=lessons.find(l=>dateObj(l.date)>=now&&l.type!=='Feriado')||lessons[lessons.length-1];const c=byId(next.course);
  document.getElementById('next-class').innerHTML=`<small>PRÓXIMA AULA · ${fmtDate(next.date)}</small><div class="next-layout"><div class="next-content"><h2>${c.name}</h2><p>${next.topic}</p><div class="next-meta"><span>◷ ${c.time}</span></div></div><div class="next-room"><small>SALA</small><strong>${c.room}</strong></div></div>`;
- document.getElementById('course-cards').innerHTML=courses.map(c=>`<article class="course-card" style="--course:${c.color}"><div class="course-top"><span class="course-icon">${c.icon}</span><div><h3>${c.name}</h3><p>${c.day} · ${c.time}</p></div><span>Sala ${c.room}</span></div><div class="course-details"><div>Aprovação<strong>${c.approval}</strong></div><div>Prova<strong>${c.exam}</strong></div><div>Turma<strong>${c.students} alunos</strong></div><div>Período<strong>2026.2</strong></div></div></article>`).join('');
+ document.getElementById('course-cards').innerHTML=courses.map(c=>`<article class="course-card" style="--course:${c.color}"><div class="course-top"><span class="course-icon" aria-hidden="true"><img src="${c.icon}" alt=""></span><div><h3>${c.name}</h3><p>${c.day} · ${c.time}</p></div><span>Sala ${c.room}</span></div><div class="course-details"><div>Aprovação<strong>${c.approval}</strong></div><div>Prova<strong>${c.exam}</strong></div><div>Turma<strong>${c.students} alunos</strong></div><div>Período<strong>2026.2</strong></div></div></article>`).join('');
 }
 
 let calendarFilter='all';
