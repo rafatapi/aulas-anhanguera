@@ -1,13 +1,25 @@
 const courses=[
- {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'B-30',time:'19h00–20h40 · 21h00–21h50',students:10,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'∑'},
- {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:10,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#5f6368',icon:'Py'},
+ {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'B-30',time:'19h00–20h40 · 21h00–21h50',students:15,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'∑'},
+ {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:14,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#5f6368',icon:'Py'},
  {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:19,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#d95800',icon:'JS'}
 ];
 
-const students={
- mat:['Gabriel R.','Caique B.','Gabriel V.','Joao O.','Kelly S.','Khaled F.','Murillo S.','Pedro P.','Rafael M.','Thiago S.'],
- py:['Gabriel R.','Caique B.','Gabriel V.','Joao O.','Kelly S.','Khaled F.','Marilton C.','Murillo S.','Rafael M.','Thiago S.'],
- js:['Beatriz S.','Cassio S.','Dawens F.','Felipe N.','Franciny A.','Guilherme O.','Isabelly C.','Jeferson L.','Jessica Y.','Juvelino B.','Murillo C.','Nicolas C.','Pedro P.','Samuel S.','Tony S.','Gabriel P.','Felipe G.','Guilherme C.','Lucas F.']
+const studentGroups={
+ mat:[
+  {id:'mat-1',label:'Lista 1',names:['Gabriel R.']},
+  {id:'mat-2',label:'Lista 2',names:['Arlindo F.','Caique B.','Gabriel V.','Joao O.','Kelly S.','Khaled F.','Murillo S.','Pedro P.','Rafael M.']},
+  {id:'mat-3',label:'Lista 3',names:['Arthur G.','Gabriel R.','Gustavo F.','Rafaela O.','Romair G.']}
+ ],
+ py:[
+  {id:'py-1',label:'Lista 1',names:['Caique B.','Gabriel V.','Joao O.','Kelly S.','Khaled F.','Marilton C.','Murillo S.','Rafael M.']},
+  {id:'py-2',label:'Lista 2',names:['Gabriel R.']},
+  {id:'py-3',label:'Lista 3',names:['Arthur G.','Gabriel R.','Gustavo F.','Rafaela O.','Romair G.']}
+ ],
+ js:[
+  {id:'js-1',label:'Lista 1',names:['Beatriz S.','Cassio S.','Dawens F.','Felipe N.','Franciny A.','Guilherme O.','Isabelly C.','Ittalo L.','Jeferson L.','Jessica Y.','Joao O.','Juvelino B.','Murillo C.','Pedro P.','Samuel S.','Tony S.']},
+  {id:'js-2',label:'Lista 2',names:['Gabriel R.']},
+  {id:'js-3',label:'Lista 3',names:['Felipe G.','Lucas F.']}
+ ]
 };
 
 const rawLessons={
@@ -46,29 +58,33 @@ document.getElementById('calendar-filters').addEventListener('click',e=>{const b
 document.getElementById('calendar-list').addEventListener('change',e=>{if(e.target.dataset.lessonCheck){const id=e.target.dataset.lessonCheck;lessonState[id]={...(lessonState[id]||{}),done:e.target.checked};saveLessonState();renderCalendar()}});
 document.getElementById('calendar-list').addEventListener('input',e=>{if(e.target.dataset.lessonNote){const id=e.target.dataset.lessonNote;lessonState[id]={...(lessonState[id]||{}),note:e.target.value};saveLessonState()}});
 
-function renderStudents(query=''){const q=query.trim().toLocaleLowerCase('pt-BR');document.getElementById('student-groups').innerHTML=courses.map(c=>{const names=students[c.id].filter(n=>n.toLocaleLowerCase('pt-BR').includes(q));return `<details class="student-group" open><summary>${c.name}<span>${names.length} alunos</span></summary><div class="student-list">${names.map(n=>`<div class="student">${n}</div>`).join('')||'<div class="student">Nenhum resultado</div>'}</div></details>`}).join('')}
+function renderStudents(query=''){const q=query.trim().toLocaleLowerCase('pt-BR');document.getElementById('student-groups').innerHTML=courses.flatMap(c=>studentGroups[c.id].map(group=>{const names=group.names.filter(n=>n.toLocaleLowerCase('pt-BR').includes(q));return `<details class="student-group" open><summary>${c.name} · ${group.label}<span>${names.length} alunos</span></summary><div class="student-list">${names.map(n=>`<div class="student">${n}</div>`).join('')||'<div class="student">Nenhum resultado</div>'}</div></details>`})).join('')}
 document.getElementById('student-search').addEventListener('input',e=>renderStudents(e.target.value));
 
 // ── CHAMADA OFFLINE ──
 const ATTENDANCE_KEY='faculdade-attendance-v1';
 let attendance=stored(ATTENDANCE_KEY);
 const attendanceCourse=document.getElementById('attendance-course');
+const attendanceGroup=document.getElementById('attendance-group');
 const attendanceDate=document.getElementById('attendance-date');
 attendanceCourse.innerHTML=courses.map(c=>`<option value="${c.id}">${c.name} · Sala ${c.room}</option>`).join('');
 attendanceDate.value=new Date().toLocaleDateString('sv-SE');
 const weekdayCourse={2:'mat',3:'py',4:'js'}[new Date().getDay()];if(weekdayCourse)attendanceCourse.value=weekdayCourse;
-const attendanceKey=()=>`${attendanceDate.value}|${attendanceCourse.value}`;
-const attendanceRecord=()=>attendance[attendanceKey()]||(attendance[attendanceKey()]={});
+function updateAttendanceGroups(){attendanceGroup.innerHTML=studentGroups[attendanceCourse.value].map(group=>`<option value="${group.id}">${group.label} · ${group.names.length} alunos</option>`).join('');attendanceGroup.value=attendanceCourse.value==='mat'?'mat-2':studentGroups[attendanceCourse.value][0].id}
+updateAttendanceGroups();
+const selectedGroup=()=>studentGroups[attendanceCourse.value].find(group=>group.id===attendanceGroup.value);
+const attendanceKey=()=>`${attendanceDate.value}|${attendanceGroup.value}`;
+function attendanceRecord(){const key=attendanceKey();if(!attendance[key]){const legacy=attendance[`${attendanceDate.value}|${attendanceCourse.value}`]||{};attendance[key]={};if(!['mat-3','py-3'].includes(attendanceGroup.value))selectedGroup().names.forEach(name=>{if(legacy[name])attendance[key][name]=legacy[name]});if(attendanceGroup.value==='js-2'&&legacy['Gabriel P.'])attendance[key]['Gabriel R.']=legacy['Gabriel P.']}return attendance[key]}
 function saveAttendance(){localStorage.setItem(ATTENDANCE_KEY,JSON.stringify(attendance))}
-function renderAttendance(){const record=attendanceRecord(),names=students[attendanceCourse.value],present=names.filter(n=>record[n]==='P').length,absent=names.filter(n=>record[n]==='F').length;document.getElementById('attendance-summary').innerHTML=`<strong>${present} presentes</strong><span>${absent} faltas · ${names.length-present-absent} sem marcar</span>`;document.getElementById('attendance-list').innerHTML=names.map((name,index)=>`<div class="attendance-student"><b>${index+1}</b><strong>${name}</strong><div><button class="attendance-status present ${record[name]==='P'?'active':''}" data-attendance-name="${name}" data-status="P">Presente</button><button class="attendance-status absent ${record[name]==='F'?'active':''}" data-attendance-name="${name}" data-status="F">Falta</button></div></div>`).join('')}
-attendanceCourse.addEventListener('change',renderAttendance);attendanceDate.addEventListener('change',renderAttendance);
+function renderAttendance(){const record=attendanceRecord(),names=selectedGroup().names,present=names.filter(n=>record[n]==='P').length,absent=names.filter(n=>record[n]==='F').length;document.getElementById('attendance-summary').innerHTML=`<strong>${present} presentes</strong><span>${absent} faltas · ${names.length-present-absent} sem marcar</span>`;document.getElementById('attendance-list').innerHTML=names.map((name,index)=>`<div class="attendance-student"><b>${index+1}</b><strong>${name}</strong><div><button class="attendance-status present ${record[name]==='P'?'active':''}" data-attendance-name="${name}" data-status="P">Presente</button><button class="attendance-status absent ${record[name]==='F'?'active':''}" data-attendance-name="${name}" data-status="F">Falta</button></div></div>`).join('')}
+attendanceCourse.addEventListener('change',()=>{updateAttendanceGroups();renderAttendance()});attendanceGroup.addEventListener('change',renderAttendance);attendanceDate.addEventListener('change',renderAttendance);
 document.getElementById('attendance-list').addEventListener('click',e=>{const button=e.target.closest('[data-attendance-name]');if(!button)return;const record=attendanceRecord(),name=button.dataset.attendanceName;record[name]=record[name]===button.dataset.status?'':button.dataset.status;saveAttendance();renderAttendance()});
-document.getElementById('attendance-all').addEventListener('click',()=>{const record=attendanceRecord();students[attendanceCourse.value].forEach(name=>record[name]='P');saveAttendance();renderAttendance()});
+document.getElementById('attendance-all').addEventListener('click',()=>{const record=attendanceRecord();selectedGroup().names.forEach(name=>record[name]='P');saveAttendance();renderAttendance()});
 document.getElementById('attendance-clear').addEventListener('click',()=>{attendance[attendanceKey()]={};saveAttendance();renderAttendance()});
-function generateAttendanceText(){const c=byId(attendanceCourse.value),record=attendanceRecord(),names=students[c.id],present=names.filter(n=>record[n]==='P'),absent=names.filter(n=>record[n]==='F'),pending=names.filter(n=>!record[n]);const date=attendanceDate.value?new Date(`${attendanceDate.value}T12:00:00`).toLocaleDateString('pt-BR'):'';const text=[`CHAMADA — ${c.name}`,`Data: ${date} · Sala ${c.room}`,`Presentes (${present.length}): ${present.join(', ')||'nenhum'}`,`Faltas (${absent.length}): ${absent.join(', ')||'nenhuma'}`,pending.length?`Sem marcação (${pending.length}): ${pending.join(', ')}`:''].filter(Boolean).join('\n');document.getElementById('attendance-text').value=text;return text}
+function generateAttendanceText(){const c=byId(attendanceCourse.value),group=selectedGroup(),record=attendanceRecord(),names=group.names,present=names.filter(n=>record[n]==='P'),absent=names.filter(n=>record[n]==='F'),pending=names.filter(n=>!record[n]);const date=attendanceDate.value?new Date(`${attendanceDate.value}T12:00:00`).toLocaleDateString('pt-BR'):'';const text=[`CHAMADA — ${c.name} · ${group.label}`,`Data: ${date} · Sala ${c.room}`,`Presentes (${present.length}): ${present.join(', ')||'nenhum'}`,`Faltas (${absent.length}): ${absent.join(', ')||'nenhuma'}`,pending.length?`Sem marcação (${pending.length}): ${pending.join(', ')}`:''].filter(Boolean).join('\n');document.getElementById('attendance-text').value=text;return text}
 document.getElementById('attendance-generate').addEventListener('click',generateAttendanceText);
 document.getElementById('attendance-copy').addEventListener('click',async()=>{const text=generateAttendanceText();try{await navigator.clipboard.writeText(text);toast('Chamada copiada')}catch{document.getElementById('attendance-text').select();document.execCommand('copy');toast('Chamada copiada')}});
-document.getElementById('attendance-download').addEventListener('click',()=>{const text=generateAttendanceText(),link=document.createElement('a');link.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));link.download=`chamada-${attendanceCourse.value}-${attendanceDate.value}.txt`;link.click();URL.revokeObjectURL(link.href)});
+document.getElementById('attendance-download').addEventListener('click',()=>{const text=generateAttendanceText(),link=document.createElement('a');link.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));link.download=`chamada-${attendanceGroup.value}-${attendanceDate.value}.txt`;link.click();URL.revokeObjectURL(link.href)});
 renderAttendance();
 
 const PRIVATE_KEY='faculdade-private-v1';const privateData=stored(PRIVATE_KEY);document.getElementById('private-email').value=privateData.email||'';document.getElementById('private-wifi').value=privateData.wifi||'';
