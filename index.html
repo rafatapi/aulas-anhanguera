@@ -11,7 +11,7 @@
   <link rel="icon" href="assets/icon.svg">
   <link rel="apple-touch-icon" href="assets/icon.svg">
   <link rel="stylesheet" href="style.css?v=6">
-  <link rel="stylesheet" href="home-adjustments.css?v=15">
+  <link rel="stylesheet" href="home-adjustments.css?v=18">
   <title>Minhas Aulas · Anhanguera</title>
 </head>
 <body>
@@ -54,10 +54,10 @@
     <section id="chamada" class="section">
       <div class="section-title"><div><small>REGISTRO OFFLINE</small><h2>Fazer chamada</h2></div><span>Presente ou falta</span></div>
       <div class="attendance-controls"><label>Matéria<select id="attendance-course"></select></label><label>Data<input id="attendance-date" type="date"></label></div>
-      <div class="attendance-toolbar"><button id="attendance-all">Todos presentes</button><button id="attendance-clear">Limpar</button></div>
+      <div class="attendance-toolbar"><button id="attendance-all">Todos presentes</button><button id="attendance-names">Ver nomes completos</button><button id="attendance-clear">Limpar</button></div>
       <div id="attendance-summary" class="attendance-summary"></div>
       <div id="attendance-list" class="attendance-list"></div>
-      <div class="attendance-export"><button id="attendance-generate">Gerar texto da chamada</button><textarea id="attendance-text" readonly placeholder="O resumo aparecerá aqui…"></textarea><div><button id="attendance-copy">Copiar texto</button><button id="attendance-download">Baixar .txt</button></div></div>
+      <div class="attendance-export"><button id="attendance-generate">Gerar lista de faltas</button><textarea id="attendance-text" readonly placeholder="As faltas marcadas aparecerão aqui…"></textarea><div><button id="attendance-copy">Copiar texto</button><button id="attendance-download">Baixar .txt</button></div></div>
     </section>
 
     <section id="links" class="section">
@@ -84,6 +84,6 @@
     </section>
   </main>
   <div id="toast" class="toast" role="status"></div>
-  <script src="app.js?v=15"></script>
+  <script src="app.js?v=18"></script>
 </body>
 </html>
