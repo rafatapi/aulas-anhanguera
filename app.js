@@ -97,7 +97,27 @@ function generateAttendanceText(){
  return text;
 }
 document.getElementById('attendance-generate').addEventListener('click',generateAttendanceText);
-document.getElementById('attendance-copy').addEventListener('click',async()=>{const text=generateAttendanceText();if(!text)return;try{await navigator.clipboard.writeText(text);toast('Chamada copiada')}catch{document.getElementById('attendance-text').select();document.execCommand('copy');toast('Chamada copiada')}});
+function attendanceHtml(text){
+ const escape=value=>value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ const [heading,...lines]=text.split('\n');
+ return `<div><strong style="font-weight:700">${escape(heading)}</strong>${lines.map(line=>`<br>${escape(line)}`).join('')}</div>`;
+}
+document.getElementById('attendance-copy').addEventListener('click',async()=>{
+ const text=generateAttendanceText();if(!text)return;
+ try{
+  if(navigator.clipboard?.write&&typeof ClipboardItem!=='undefined'){
+   await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([attendanceHtml(text)],{type:'text/html'}),'text/plain':new Blob([text],{type:'text/plain'})})]);
+   toast('Chamada copiada com negrito');return;
+  }
+ }catch{}
+ try{
+  await navigator.clipboard.writeText(text);
+  toast('Chamada copiada sem formatação');
+ }catch{
+  document.getElementById('attendance-text').select();
+  toast(document.execCommand('copy')?'Chamada copiada sem formatação':'Selecione o texto e copie manualmente');
+ }
+});
 document.getElementById('attendance-download').addEventListener('click',()=>{const text=generateAttendanceText();if(!text)return;const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));link.download=`faltas-${attendanceCourse.value}-${attendanceDate.value}.txt`;link.click();URL.revokeObjectURL(link.href)});
 renderAttendance();
 
