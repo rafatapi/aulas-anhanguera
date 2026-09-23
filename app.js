@@ -91,7 +91,7 @@ function generateAttendanceText(){
  const date=attendanceDate.value?fmtDate(attendanceDate.value):'';
  const groups=currentGroups().map(group=>({group,absent:group.names.filter(name=>attendanceRecord(group)[name]==='F')}));
  const lines=[`📅 ${date} — ${attendanceSubjects[attendanceCourse.value]}`];
- groups.forEach(({group,absent})=>lines.push('',group.label.toUpperCase(),...(absent.length?absent.map(name=>studentFullNames[name]):['Nenhuma falta'])));
+ groups.filter(({absent})=>absent.length).forEach(({group,absent})=>lines.push('',group.label.toUpperCase(),...absent.map(name=>studentFullNames[name])));
  const text=lines.join('\n');
  document.getElementById('attendance-text').value=text;
  return text;
