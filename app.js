@@ -1,30 +1,31 @@
 const courses=[
- {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:15,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'assets/math.svg'},
- {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:14,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#3776ab',icon:'assets/python.svg'},
- {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:19,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#b38800',icon:'assets/javascript.svg'}
+ {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:16,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'assets/math.svg'},
+ {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:15,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#3776ab',icon:'assets/python.svg'},
+ {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:22,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#b38800',icon:'assets/javascript.svg'}
 ];
 
 const studentGroups={
  mat:[
   {id:'mat-1',label:'Lista 1',names:['Gabriel R. P.']},
   {id:'mat-2',label:'Lista 2',names:['Arlindo F.','Caique B.','Gabriel V.','Joao P. O.','Kelly S.','Khaled F.','Murillo S.','Pedro H. P.','Rafael M.']},
-  {id:'mat-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Rafaela O.','Romair G.']}
+  {id:'mat-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Rafaela O.','Romair G.','Tomas B.']}
  ],
  py:[
-  {id:'py-1',label:'Lista 1',names:['Caique B.','Gabriel V.','Joao P. O.','Kelly S.','Khaled F.','Marilton C.','Murillo S.','Rafael M.']},
+  {id:'py-1',label:'Lista 1',names:['Caique B.','Gabriel V.','Joao P. O.','Kelly S.','Khaled F.','Marilton C.','Murillo S.','Rafael M.','Raimundo S.']},
   {id:'py-2',label:'Lista 2',names:['Gabriel R. P.']},
   {id:'py-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Rafaela O.','Romair G.']}
  ],
  js:[
-  {id:'js-1',label:'Lista 1',names:['Beatriz S.','Cassio S.','Dawens F.','Felipe N.','Franciny A.','Guilherme O.','Isabelly C.','Ittalo L.','Jeferson L.','Jessica Y.','Joao V. O.','Juvelino B.','Murillo C.','Pedro G. P.','Samuel S.','Tony S.']},
+  {id:'js-1',label:'Lista 1',names:['Beatriz S.','Cassio S.','Dawens F.','Felipe N.','Franciny A.','Guilherme O.','Isabelly C.','Ittalo L.','Jeferson L.','Jessica Y.','Joao V. O.','Juvelino B.','Murillo C.','Pedro G. P.','Raimundo S.','Samuel S.','Tony S.','Wesley S.']},
   {id:'js-2',label:'Lista 2',names:['Gabriel R. P.']},
-  {id:'js-3',label:'Lista 3',names:['Felipe G.','Lucas F.']}
+  {id:'js-3',label:'Lista 3',names:['Felipe G.','Guilherme C.','Lucas F.']}
  ]
 };
 
 
 const studentFullNames={
- 'Arlindo F.':'Arlindo Ferreira De Oliveira Neto','Arthur G.':'Arthur Do Nacsimento Guedes','Beatriz S.':'Beatriz Santos Silva','Caique B.':'Caique Brito De Assis','Cassio S.':'Cassio Adriano Dos Santos','Dawens F.':'Dawens Francois','Felipe G.':'Felipe Fernandes Galdino','Felipe N.':'Felipe Borba Do Nascimento','Franciny A.':'Franciny Dantas De Almeida','Gabriel R. P.':'Gabriel Rodrigues Do Prado','Gabriel R. S.':'Gabriel Roberto De Jesus Santos','Gabriel V.':'Gabriel Vinicius Pereira','Guilherme O.':'Guilherme Borges De Oliveira','Gustavo F.':'Gustavo Dourado Fagundes','Isabelly C.':'Isabelly Castro Cardoso','Ittalo L.':'Ittalo Sobrinho Lima','Jeferson L.':'Jeferson Soares Lino','Jessica Y.':'Jessica Joelma Flores Mendoza Yujra','Joao P. O.':'Joao Paulo Oltramari Da Silva','Joao V. O.':'Joao Vitor Dos Santos Oliveira','Juvelino B.':'Juvelino Soares Baleeiro','Kelly S.':'Kelly Santos Vieira','Khaled F.':'Khaled Fatah Rasherashe','Lucas F.':'Lucas Silva Ferreira','Marilton C.':'Marilton Da Cunha Junior','Murillo C.':'Murillo Bernabe Da Cruz','Murillo S.':'Murillo Santos Costa','Pedro G. P.':'Pedro Gutierres Passanha','Pedro H. P.':'Pedro Henrique Pereira Pessoa Niel Teixeira','Rafael M.':'Rafael Mariano De Araujo Gouveia Dos Reis','Rafaela O.':'Rafaela Rodrigues Oliveira','Romair G.':'Romair Mauricio Gomes','Samuel S.':'Samuel Oliveira Sobral','Tony S.':'Tony Vitor Urbano Silva'
+ 'Arlindo F.':'Arlindo Ferreira de Oliveira Neto','Arthur G.':'Arthur do Nacsimento Guedes','Beatriz S.':'Beatriz Santos Silva','Caique B.':'Caique Brito de Assis','Cassio S.':'Cassio Adriano dos Santos','Dawens F.':'Dawens Francois','Felipe G.':'Felipe Fernandes Galdino','Felipe N.':'Felipe Borba do Nascimento','Franciny A.':'Franciny Dantas de Almeida','Gabriel R. P.':'Gabriel Rodrigues do Prado','Gabriel R. S.':'Gabriel Roberto de Jesus Santos','Gabriel V.':'Gabriel Vinicius Pereira','Guilherme O.':'Guilherme Borges de Oliveira','Gustavo F.':'Gustavo Dourado Fagundes','Isabelly C.':'Isabelly Castro Cardoso','Ittalo L.':'Ittalo Sobrinho Lima','Jeferson L.':'Jeferson Soares Lino','Jessica Y.':'Jessica Joelma Flores Mendoza Yujra','Joao P. O.':'Joao Paulo Oltramari da Silva','Joao V. O.':'Joao Vitor dos Santos Oliveira','Juvelino B.':'Juvelino Soares Baleeiro','Kelly S.':'Kelly Santos Vieira','Khaled F.':'Khaled Fatah Rasherashe','Lucas F.':'Lucas Silva Ferreira','Marilton C.':'Marilton da Cunha Junior','Murillo C.':'Murillo Bernabe da Cruz','Murillo S.':'Murillo Santos Costa','Pedro G. P.':'Pedro Gutierres Passanha','Pedro H. P.':'Pedro Henrique Pereira Pessoa Niel Teixeira','Rafael M.':'Rafael Mariano de Araujo Gouveia dos Reis','Rafaela O.':'Rafaela Rodrigues Oliveira','Romair G.':'Romair Mauricio Gomes','Samuel S.':'Samuel Oliveira Sobral','Tony S.':'Tony Vitor Urbano Silva',
+ 'Guilherme C.':'Guilherme Henrique Nicolini Caso','Raimundo S.':'Raimundo Maciano Souza dos Santos','Tomas B.':'Tomas Silveira Bueno','Wesley S.':'Wesley Gabriel Binatto de Souza'
 };
 
 const rawLessons={
@@ -84,7 +85,17 @@ document.getElementById('attendance-list').addEventListener('click',e=>{const bu
 document.getElementById('attendance-names').addEventListener('click',()=>{showFullNames=!showFullNames;renderAttendance()});
 document.getElementById('attendance-all').addEventListener('click',()=>{currentGroups().forEach(group=>{const record=attendanceRecord(group);group.names.forEach(name=>record[name]='P')});saveAttendance();renderAttendance()});
 document.getElementById('attendance-clear').addEventListener('click',()=>{currentGroups().forEach(group=>attendance[attendanceKey(group)]={});saveAttendance();renderAttendance()});
-function generateAttendanceText(){if(attendancePending()){toast('Marque todos os alunos antes de exportar');return ''}const c=byId(attendanceCourse.value),date=attendanceDate.value?new Date(`${attendanceDate.value}T12:00:00`).toLocaleDateString('pt-BR'):'';const groups=currentGroups().map(group=>{const record=attendanceRecord(group),absent=group.names.filter(name=>record[name]==='F');return {group,absent}}).filter(item=>item.absent.length);const lines=[`FALTAS — ${c.name}`,`Data: ${date} · Sala ${c.room}`];if(!groups.length)lines.push('','Nenhuma falta marcada.');groups.forEach(({group,absent})=>lines.push('',`${group.label} (${absent.length})`,...absent.map(name=>studentFullNames[name]||name)));const text=lines.join('\n');document.getElementById('attendance-text').value=text;return text}
+const attendanceSubjects={mat:'📘 Lógica',py:'🐍 Python',js:'🟨 Javascript'};
+function generateAttendanceText(){
+ if(attendancePending()){toast('Marque todos os alunos antes de exportar');return ''}
+ const date=attendanceDate.value?fmtDate(attendanceDate.value):'';
+ const groups=currentGroups().map(group=>({group,absent:group.names.filter(name=>attendanceRecord(group)[name]==='F')}));
+ const lines=[`📅 ${date} — ${attendanceSubjects[attendanceCourse.value]}`];
+ groups.forEach(({group,absent})=>lines.push('',group.label.toUpperCase(),...(absent.length?absent.map(name=>studentFullNames[name]):['Nenhuma falta'])));
+ const text=lines.join('\n');
+ document.getElementById('attendance-text').value=text;
+ return text;
+}
 document.getElementById('attendance-generate').addEventListener('click',generateAttendanceText);
 document.getElementById('attendance-copy').addEventListener('click',async()=>{const text=generateAttendanceText();if(!text)return;try{await navigator.clipboard.writeText(text);toast('Chamada copiada')}catch{document.getElementById('attendance-text').select();document.execCommand('copy');toast('Chamada copiada')}});
 document.getElementById('attendance-download').addEventListener('click',()=>{const text=generateAttendanceText();if(!text)return;const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));link.download=`faltas-${attendanceCourse.value}-${attendanceDate.value}.txt`;link.click();URL.revokeObjectURL(link.href)});
