@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="assets/icon.svg">
   <link rel="apple-touch-icon" href="assets/icon.svg">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
   <link rel="stylesheet" href="home-adjustments.css?v=18">
   <title>Minhas Aulas · Anhanguera</title>
 </head>
@@ -47,6 +47,7 @@
     <section id="calendario" class="section">
       <div class="section-title"><div><small>AGOSTO A DEZEMBRO</small><h2>Calendário de aulas</h2></div></div>
       <div class="filter-row" id="calendar-filters"></div>
+      <label class="calendar-options"><input id="calendar-hide-past" type="checkbox"> Ocultar aulas passadas</label>
       <div class="progress-card"><div><strong id="lesson-progress">0 de 0 aulas concluídas</strong><span id="progress-pct">0%</span></div><div class="progress-track"><i id="progress-fill"></i></div></div>
       <div id="calendar-list" class="calendar-list"></div>
     </section>
@@ -84,6 +85,6 @@
     </section>
   </main>
   <div id="toast" class="toast" role="status"></div>
-  <script src="app.js?v=22"></script>
+  <script src="app.js?v=23"></script>
 </body>
 </html>
