@@ -1,6 +1,6 @@
 const courses=[
- {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:16,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'assets/math.svg'},
- {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:15,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#3776ab',icon:'assets/python.svg'},
+ {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:17,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'assets/math.svg'},
+ {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:16,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#3776ab',icon:'assets/python.svg'},
  {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:22,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#b38800',icon:'assets/javascript.svg'}
 ];
 
@@ -8,12 +8,12 @@ const studentGroups={
  mat:[
   {id:'mat-1',label:'Lista 1',names:['Gabriel R. P.']},
   {id:'mat-2',label:'Lista 2',names:['Arlindo F.','Caique B.','Gabriel V.','Joao P. O.','Kelly S.','Khaled F.','Murillo S.','Pedro H. P.','Rafael M.']},
-  {id:'mat-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Rafaela O.','Romair G.','Tomas B.']}
+  {id:'mat-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Pierre C.','Rafaela O.','Romair G.','Tomas B.']}
  ],
  py:[
   {id:'py-1',label:'Lista 1',names:['Caique B.','Gabriel V.','Joao P. O.','Kelly S.','Khaled F.','Marilton C.','Murillo S.','Rafael M.','Raimundo S.']},
   {id:'py-2',label:'Lista 2',names:['Gabriel R. P.']},
-  {id:'py-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Rafaela O.','Romair G.']}
+  {id:'py-3',label:'Lista 3',names:['Arthur G.','Gabriel R. S.','Gustavo F.','Pierre C.','Rafaela O.','Romair G.']}
  ],
  js:[
   {id:'js-1',label:'Lista 1',names:['Beatriz S.','Cassio S.','Dawens F.','Felipe N.','Franciny A.','Guilherme O.','Isabelly C.','Ittalo L.','Jeferson L.','Jessica Y.','Joao V. O.','Juvelino B.','Murillo C.','Pedro G. P.','Raimundo S.','Samuel S.','Tony S.','Wesley S.']},
@@ -24,6 +24,7 @@ const studentGroups={
 
 
 const studentFullNames={
+ 'Pierre C.':'Pierre Michel Charles',
  'Arlindo F.':'Arlindo Ferreira de Oliveira Neto','Arthur G.':'Arthur do Nacsimento Guedes','Beatriz S.':'Beatriz Santos Silva','Caique B.':'Caique Brito de Assis','Cassio S.':'Cassio Adriano dos Santos','Dawens F.':'Dawens Francois','Felipe G.':'Felipe Fernandes Galdino','Felipe N.':'Felipe Borba do Nascimento','Franciny A.':'Franciny Dantas de Almeida','Gabriel R. P.':'Gabriel Rodrigues do Prado','Gabriel R. S.':'Gabriel Roberto de Jesus Santos','Gabriel V.':'Gabriel Vinicius Pereira','Guilherme O.':'Guilherme Borges de Oliveira','Gustavo F.':'Gustavo Dourado Fagundes','Isabelly C.':'Isabelly Castro Cardoso','Ittalo L.':'Ittalo Sobrinho Lima','Jeferson L.':'Jeferson Soares Lino','Jessica Y.':'Jessica Joelma Flores Mendoza Yujra','Joao P. O.':'Joao Paulo Oltramari da Silva','Joao V. O.':'Joao Vitor dos Santos Oliveira','Juvelino B.':'Juvelino Soares Baleeiro','Kelly S.':'Kelly Santos Vieira','Khaled F.':'Khaled Fatah Rasherashe','Lucas F.':'Lucas Silva Ferreira','Marilton C.':'Marilton da Cunha Junior','Murillo C.':'Murillo Bernabe da Cruz','Murillo S.':'Murillo Santos Costa','Pedro G. P.':'Pedro Gutierres Passanha','Pedro H. P.':'Pedro Henrique Pereira Pessoa Niel Teixeira','Rafael M.':'Rafael Mariano de Araujo Gouveia dos Reis','Rafaela O.':'Rafaela Rodrigues Oliveira','Romair G.':'Romair Mauricio Gomes','Samuel S.':'Samuel Oliveira Sobral','Tony S.':'Tony Vitor Urbano Silva',
  'Guilherme C.':'Guilherme Henrique Nicolini Caso','Raimundo S.':'Raimundo Maciano Souza dos Santos','Tomas B.':'Tomas Silveira Bueno','Wesley S.':'Wesley Gabriel Binatto de Souza'
 };
@@ -73,12 +74,29 @@ attendanceCourse.innerHTML=courses.map(c=>`<option value="${c.id}">${c.name} · 
 attendanceDate.value=new Date().toLocaleDateString('sv-SE');
 const weekdayCourse={2:'mat',3:'py',4:'js'}[new Date().getDay()];if(weekdayCourse)attendanceCourse.value=weekdayCourse;
 const currentGroups=()=>studentGroups[attendanceCourse.value];
+// Keep original groups as storage keys so saved attendance remains available.
+const currentStudents=()=>currentGroups().flatMap(group=>group.names.map(name=>({group,name})))
+ .sort((a,b)=>studentFullNames[a.name].localeCompare(studentFullNames[b.name],'pt-BR'));
 let showFullNames=false;
 const attendanceKey=group=>`${attendanceDate.value}|${group.id}`;
 const attendanceRecord=group=>attendance[attendanceKey(group)]||(attendance[attendanceKey(group)]={});
 const attendancePending=()=>currentGroups().reduce((count,group)=>count+group.names.filter(name=>!attendanceRecord(group)[name]).length,0);
 function saveAttendance(){localStorage.setItem(ATTENDANCE_KEY,JSON.stringify(attendance))}
-function renderAttendance(){let present=0,absent=0,total=0;document.getElementById('attendance-list').innerHTML=currentGroups().map(group=>{const record=attendanceRecord(group);present+=group.names.filter(name=>record[name]==='P').length;absent+=group.names.filter(name=>record[name]==='F').length;total+=group.names.length;return `<div class="attendance-group-title"><strong>${group.label}</strong><span>${group.names.length} alunos</span></div>${group.names.map((name,index)=>`<div class="attendance-student"><b>${index+1}</b><button class="student-name" type="button" data-short-name="${name}" aria-label="Alternar nome completo de ${name}">${showFullNames?(studentFullNames[name]||name):name}</button><div><button class="attendance-status present ${record[name]==='P'?'active':''}" data-attendance-group="${group.id}" data-attendance-name="${name}" data-status="P">Presente</button><button class="attendance-status absent ${record[name]==='F'?'active':''}" data-attendance-group="${group.id}" data-attendance-name="${name}" data-status="F">Falta</button></div></div>`).join('')}`}).join('');document.getElementById('attendance-summary').innerHTML=`<strong>${present} presentes</strong><span>${absent} faltas · ${total-present-absent} sem marcar</span>`;document.getElementById('attendance-names').textContent=showFullNames?'Ocultar nomes completos':'Ver nomes completos';const pending=total-present-absent;['attendance-generate','attendance-copy','attendance-download'].forEach(id=>{const button=document.getElementById(id);button.disabled=pending>0;button.title=pending?`Marque os ${pending} alunos pendentes antes de exportar`:''});if(pending)document.getElementById('attendance-text').value=''}
+function renderAttendance(){
+ const students=currentStudents();
+ let present=0,absent=0;
+ document.getElementById('attendance-list').innerHTML=students.map(({group,name},index)=>{
+  const status=attendanceRecord(group)[name];
+  if(status==='P')present++;
+  if(status==='F')absent++;
+  return `<div class="attendance-student"><b>${index+1}</b><button class="student-name" type="button" data-short-name="${name}" aria-label="Alternar nome completo de ${name}">${showFullNames?studentFullNames[name]:name}</button><div><button class="attendance-status present ${status==='P'?'active':''}" data-attendance-group="${group.id}" data-attendance-name="${name}" data-status="P">Presente</button><button class="attendance-status absent ${status==='F'?'active':''}" data-attendance-group="${group.id}" data-attendance-name="${name}" data-status="F">Falta</button></div></div>`;
+ }).join('');
+ const pending=students.length-present-absent;
+ document.getElementById('attendance-summary').innerHTML=`<strong>${present} presentes</strong><span>${absent} faltas · ${pending} sem marcar</span>`;
+ document.getElementById('attendance-names').textContent=showFullNames?'Ocultar nomes completos':'Ver nomes completos';
+ ['attendance-generate','attendance-copy','attendance-download'].forEach(id=>{const button=document.getElementById(id);button.disabled=pending>0;button.title=pending?`Marque os ${pending} alunos pendentes antes de exportar`:''});
+ if(pending)document.getElementById('attendance-text').value='';
+}
 attendanceCourse.addEventListener('change',renderAttendance);attendanceDate.addEventListener('change',renderAttendance);
 document.getElementById('attendance-list').addEventListener('click',e=>{const button=e.target.closest('[data-attendance-name]');if(!button)return;const group=currentGroups().find(item=>item.id===button.dataset.attendanceGroup),record=attendanceRecord(group),name=button.dataset.attendanceName;record[name]=record[name]===button.dataset.status?'':button.dataset.status;saveAttendance();renderAttendance()});
 document.getElementById('attendance-list').addEventListener('click',e=>{const button=e.target.closest('[data-short-name]');if(!button)return;const shortName=button.dataset.shortName;button.textContent=button.textContent===shortName?(studentFullNames[shortName]||shortName):shortName});
@@ -89,9 +107,9 @@ const attendanceSubjects={mat:'📘 Lógica',py:'🐍 Python',js:'🟨 Javascrip
 function generateAttendanceText(){
  if(attendancePending()){toast('Marque todos os alunos antes de exportar');return ''}
  const date=attendanceDate.value?fmtDate(attendanceDate.value):'';
- const groups=currentGroups().map(group=>({group,absent:group.names.filter(name=>attendanceRecord(group)[name]==='F')}));
+ const absent=currentStudents().filter(({group,name})=>attendanceRecord(group)[name]==='F');
  const lines=[`📅 ${date} — ${attendanceSubjects[attendanceCourse.value]}`];
- groups.filter(({absent})=>absent.length).forEach(({group,absent})=>lines.push('',group.label.toUpperCase(),...absent.map(name=>studentFullNames[name])));
+ if(absent.length)lines.push('',...absent.map(({name})=>studentFullNames[name]));
  const text=lines.join('\n');
  document.getElementById('attendance-text').value=text;
  return text;
