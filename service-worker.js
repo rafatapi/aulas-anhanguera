@@ -1,5 +1,5 @@
-const CACHE='aulas-v23';
-const ASSETS=['./','./index.html','./style.css?v=7','./home-adjustments.css?v=18','./app.js?v=23','./manifest.json','./assets/icon.svg','./assets/math.svg','./assets/python.svg','./assets/javascript.svg'];
+const CACHE='aulas-v24';
+const ASSETS=['./','./index.html','./style.css?v=7','./home-adjustments.css?v=18','./app.js?v=24','./manifest.json','./assets/icon.svg','./assets/math.svg','./assets/python.svg','./assets/javascript.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
