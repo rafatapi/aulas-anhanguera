@@ -1,10 +1,10 @@
 const courses=[
- {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:17,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'assets/math.svg'},
- {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:16,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#3776ab',icon:'assets/python.svg'},
- {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:22,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#b38800',icon:'assets/javascript.svg'}
+ {id:'mat',name:'Lógica e Matemática',full:'Lógica e Matemática Computacional',day:'Terça-feira',room:'Lab 2',time:'19h00–20h40 · 21h00–21h50',students:14,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#ef6c00',icon:'assets/math.svg'},
+ {id:'py',name:'Python',full:'Linguagem de Programação',day:'Quarta-feira',room:'B-39',time:'19h00–20h40 · 21h00–21h50',students:14,approval:'6.000 / 12.000',exam:'mín. 1.500 / 6.000',color:'#3776ab',icon:'assets/python.svg'},
+ {id:'js',name:'JavaScript',full:'Desenvolvimento em JavaScript',day:'Quinta-feira',room:'B-28',time:'21h00–22h40',students:21,approval:'6.000 / 12.000',exam:'mín. 4.000 / 6.000',color:'#b38800',icon:'assets/javascript.svg'}
 ];
 
-const studentGroups={
+const legacyStudentGroups={
  mat:[
   {id:'mat-1',label:'Lista 1',names:['Gabriel R. P.']},
   {id:'mat-2',label:'Lista 2',names:['Arlindo F.','Caique B.','Gabriel V.','Joao P. O.','Kelly S.','Khaled F.','Murillo S.','Pedro H. P.','Rafael M.']},
@@ -22,6 +22,130 @@ const studentGroups={
  ]
 };
 
+
+// Portal Docente, período 2026/2: nove listas conferidas em 26/10/2026.
+// Preserve os IDs e nomes abreviados: são as chaves das chamadas já salvas.
+const rosterUpdatedAt='2026-10-26';
+const studentGroups={
+ "mat": [
+  {
+   "id": "mat-1",
+   "label": "1151820252A",
+   "classCode": "1151820252A",
+   "names": [
+    "Gabriel R. P."
+   ]
+  },
+  {
+   "id": "mat-2",
+   "label": "1151820261A",
+   "classCode": "1151820261A",
+   "names": [
+    "Arlindo F.",
+    "Caique B.",
+    "Gabriel V.",
+    "Joao P. O.",
+    "Kelly S.",
+    "Khaled F.",
+    "Murillo S.",
+    "Pedro H. P."
+   ]
+  },
+  {
+   "id": "mat-3",
+   "label": "1151820262A",
+   "classCode": "1151820262A",
+   "names": [
+    "Gabriel R. S.",
+    "Gustavo F.",
+    "Rafaela O.",
+    "Romair G.",
+    "Tomas B."
+   ]
+  }
+ ],
+ "py": [
+  {
+   "id": "py-1",
+   "label": "1151820261A",
+   "classCode": "1151820261A",
+   "names": [
+    "Arlindo F.",
+    "Caique B.",
+    "Gabriel V.",
+    "Joao P. O.",
+    "Kelly S.",
+    "Khaled F.",
+    "Marilton C.",
+    "Murillo S.",
+    "Raimundo S."
+   ]
+  },
+  {
+   "id": "py-2",
+   "label": "1151820252A",
+   "classCode": "1151820252A",
+   "names": [
+    "Gabriel R. P."
+   ]
+  },
+  {
+   "id": "py-3",
+   "label": "1151820262A",
+   "classCode": "1151820262A",
+   "names": [
+    "Gabriel R. S.",
+    "Gustavo F.",
+    "Rafaela O.",
+    "Romair G."
+   ]
+  }
+ ],
+ "js": [
+  {
+   "id": "js-1",
+   "label": "1151820251A",
+   "classCode": "1151820251A",
+   "names": [
+    "Beatriz S.",
+    "Cassio S.",
+    "Dawens F.",
+    "Felipe N.",
+    "Franciny A.",
+    "Guilherme O.",
+    "Ittalo L.",
+    "Jeferson L.",
+    "Jessica Y.",
+    "Joao V. O.",
+    "Juvelino B.",
+    "Murillo C.",
+    "Pedro G. P.",
+    "Raimundo S.",
+    "Samuel S.",
+    "Tony S.",
+    "Wesley S."
+   ]
+  },
+  {
+   "id": "js-2",
+   "label": "1151820252A",
+   "classCode": "1151820252A",
+   "names": [
+    "Gabriel R. P."
+   ]
+  },
+  {
+   "id": "js-3",
+   "label": "1151820242A",
+   "classCode": "1151820242A",
+   "names": [
+    "Felipe G.",
+    "Guilherme C.",
+    "Lucas F."
+   ]
+  }
+ ]
+};
 
 const studentFullNames={
  'Pierre C.':'Pierre Michel Charles',
@@ -93,7 +217,8 @@ const attendanceDate=document.getElementById('attendance-date');
 attendanceCourse.innerHTML=courses.map(c=>`<option value="${c.id}">${c.name} · Sala ${c.room}</option>`).join('');
 attendanceDate.value=new Date().toLocaleDateString('sv-SE');
 const weekdayCourse={2:'mat',3:'py',4:'js'}[new Date().getDay()];if(weekdayCourse)attendanceCourse.value=weekdayCourse;
-const currentGroups=()=>studentGroups[attendanceCourse.value];
+const currentGroups=()=>((attendanceDate.value && attendanceDate.value<rosterUpdatedAt)
+ ?legacyStudentGroups:studentGroups)[attendanceCourse.value];
 // Keep original groups as storage keys so saved attendance remains available.
 const currentStudents=()=>currentGroups().flatMap(group=>group.names.map(name=>({group,name})))
  .sort((a,b)=>studentFullNames[a.name].localeCompare(studentFullNames[b.name],'pt-BR'));
